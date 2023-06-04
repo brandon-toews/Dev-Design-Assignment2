@@ -32,7 +32,7 @@ class TableToolbar:
             
             # Populate the table combobox with the table names
             self.training_manager.table_combobox["values"] = [table[0] for table in tables]
-            self.training_manager.table_combobox.set("")  # Clear the selection
+            
     
         except mysql.Error as e:
             print(f"Error: {e}")
@@ -104,7 +104,7 @@ class TableToolbar:
                     )
         
                     # Show a success message to the user
-                    self.success_label.config(text=f"Table '{table_name}' created successfully.", foreground="black", font=small_bold)
+                    self.success_label.config(text=f"Table '{table_name}' created successfully.", foreground="green", font=small_bold)
     
                 except mysql.Error as e:
                     print(f"Error: {e}")
@@ -143,7 +143,7 @@ class TableToolbar:
                 connection.commit()
         
                 # Show a success message to the user
-                self.success_label.config(text=f"Table '{selected_table}' deleted successfully.", foreground="black", font=small_bold)
+                self.success_label.config(text=f"Table '{selected_table}' deleted successfully.", foreground="green", font=small_bold)
     
             except mysql.Error as e:
                 print(f"Error: {e}")
@@ -152,24 +152,56 @@ class TableToolbar:
                 # Close the cursor and database connection
                 cursor.close()
                 connection.close()
+                
+                if selected_table == self.training_manager.table_combobox.get():
+                    # Clear listboxes and comboboxes of deleted table
+                    self.training_manager.table_combobox.set("")  # Clear the selection
+                    self.training_manager.ind_column_listbox.delete(0, tk.END)  # Clear previous items
+                    self.training_manager.dep_column_listbox.delete(0, tk.END)  # Clear previous items
+                    self.training_manager.xcolumn_listbox.delete(0, tk.END)  # Clear previous items
+                    self.training_manager.pred_label.config(text="")
+                    
+                    self.dataframe_toolbar.which_table_label.config(text="Table: NONE")
+                    self.dataframe_toolbar.column_combobox["values"] = ''
+                    self.dataframe_toolbar.column_combobox.set("")
+                    self.dataframe_toolbar.dtype_combobox.set("") # Clear previous datatype selection
+                    self.dataframe_toolbar.dtype_label.config(text="")
+                    self.dataframe_toolbar.x_combobox["values"] = ''
+                    self.dataframe_toolbar.x_combobox.set("")
+                    self.dataframe_toolbar.y_combobox["values"] = ''
+                    self.dataframe_toolbar.y_combobox.set("")
+                    self.dataframe_toolbar.hue_combobox["values"] = ''
+                    self.dataframe_toolbar.hue_combobox.set("")
+                    self.dataframe_toolbar.plt_combobox.set("")  # Clear the selection
+                    self.view_window.change_image(self.original_canvas_photo)
+                
                 #Refresh table info
                 self.show_tables()
+                
+                print(self.training_manager.table_combobox.get())
+                
+        else:
+            self.success_label.config(text="Must select a table!", foreground="red", font=small_bold)
+                 
                 
     def quit_program(self):
         self.exit_flag.set(True)
         
     
-    def __init__(self, frame, training_manager, exit_flag):
+    def __init__(self, frame, view_window, training_manager, dataframe_toolbar, exit_flag):
         self.home_frame = frame
+        self.view_window = view_window
         self.training_manager = training_manager
+        self.dataframe_toolbar = dataframe_toolbar
+        self.original_canvas_photo = "data_visualization_general.jpg"
         self.exit_flag = exit_flag
         
         # Create tool bar frame
-        self.table_tool_bar = tk.Frame(self.home_frame, width=180, height=185)
-        self.table_tool_bar.grid(row=1, column=0, padx=5, pady=5)
+        self.table_tool_bar = tk.Frame(self.home_frame, width=180, height=185, relief='ridge')
+        self.table_tool_bar.grid(row=1, column=0, padx=3, pady=3)
 
         # Create a label for the table selection
-        self.table_label = ttk.Label(self.table_tool_bar, text="Table Manager", font=large_font)
+        self.table_label = ttk.Label(self.table_tool_bar, text="Table Manager", font=large_font, relief='raised')
         self.table_label.grid(row=1, column=0, columnspan=3, pady=3, sticky="s")
 
         # Create a label for the table creation section
@@ -212,16 +244,16 @@ class TableToolbar:
 
         # Create a button to delete the selected table
         self.delete_button = ttk.Button(self.table_tool_bar, text="Delete Table", command=self.delete_table)
-        self.delete_button.grid(row=10, column=0, columnspan=3, sticky="n")
+        self.delete_button.grid(row=10, column=0, columnspan=3, pady=2)
 
         # Create a button to quit the program
         self.create_table_button = ttk.Button(self.table_tool_bar, text="Quit", command=self.quit_program)
-        self.create_table_button.grid(row=11, column=0, columnspan=3, pady=3, sticky="s")
+        self.create_table_button.grid(row=11, column=0, columnspan=3, pady=2)
 
         # Create a label to display success message
-        self.success_label = ttk.Label(self.table_tool_bar)
-        self.success_label.grid(row=12, column=0, columnspan=3, pady=5, sticky="n")
+        self.success_label = ttk.Label(self.table_tool_bar, justify='center', wraplength=180)
+        self.success_label.grid(row=12, column=0, columnspan=3, pady=2)
 
 
-        self.table_tool_bar.rowconfigure(2, minsize=10)
-        self.table_tool_bar.rowconfigure(6, minsize=10)
+        self.table_tool_bar.rowconfigure(2, minsize=7)
+        self.table_tool_bar.rowconfigure(6, minsize=7)
