@@ -195,7 +195,7 @@ class DataFrameToolbar:
         self.plt_types = ['regplot', 'lmplot', 'jointplot', 'scatterplot']
         
         # Create tool bar frame
-        self.dataframe_tool_bar = tk.Frame(self.home_frame, width=180, height=185, relief='ridge')
+        self.dataframe_tool_bar = tk.Frame(self.home_frame, width=500, height=185, relief='ridge')
         self.dataframe_tool_bar.grid(row=1, column=1, padx=3, pady=3)
 
         # Create a label for the table selection
@@ -219,92 +219,80 @@ class DataFrameToolbar:
         self.column_combobox.grid(row=5, column=1, padx=2)
         self.column_combobox.bind("<<ComboboxSelected>>", self.on_column_combobox_select)
         
-        # Create a scrollbar
-        #self.col_listbox_scrollbar = ttk.Scrollbar(self.dataframe_tool_bar)
-        #self.col_listbox_scrollbar.grid(row=6, column=1, sticky='ns')
-
-        # Create a Listbox widget
-        #self.column_listbox = tk.Listbox(self.dataframe_tool_bar, height=2, width=22, yscrollcommand=self.col_listbox_scrollbar.set, selectmode=tk.SINGLE)
-        #self.column_listbox.grid(row=6, column=0, padx=2, sticky='nsew')
-        #self.column_listbox.bind("<<ListboxSelect>>", self.on_column_combobox_select)
-
-        # Configure the scrollbar to scroll the Listbox
-        #self.col_listbox_scrollbar.config(command=self.column_listbox.yview)
         
         # Create a label for the datatype selection
         self.dtype_label = ttk.Label(self.dataframe_tool_bar, text="DataType:")
         self.dtype_label.grid(row=7, column=0, sticky='e')
 
-        # Create a combobox for table selection
+        # Create a combobox for datatype selection
         self.dtype_combobox = ttk.Combobox(self.dataframe_tool_bar, width=13)
         self.dtype_combobox.grid(row=7, column=1, padx=2)
         
-        # Populate the table combobox with the table names
+        # Populate the datatype combobox
         self.dtype_combobox["values"] = self.dtypes
         self.dtype_combobox.set("")  # Clear the selection
 
         
-        # Create a button to create the table
+        # Create a button to convert column datatype
         self.conv_dtype_button = ttk.Button(self.dataframe_tool_bar, text="Convert DType", command=self.convert_dtype)
         self.conv_dtype_button.grid(row=9, column=0, columnspan=2, padx=3, sticky="w")
         
-        # Create a button to create the table
+        # Create a button to show info on dataframe
         self.df_info_button = ttk.Button(self.dataframe_tool_bar, text="Info", command=self.view_df_info)
         self.df_info_button.grid(row=9, column=1, padx=3, sticky="e")
         self.df_info_button.configure(width=3)
         
-        # Create a label to display success message
+        # Create a label to display datatype info of selected column
         self.dtype_label = ttk.Label(self.dataframe_tool_bar, justify='center', wraplength=180)
         self.dtype_label.grid(row=10, column=0, columnspan=3, pady=3, sticky="n")
         
         
 
-        # Create a label for the table creation section
+        # Create a label for visualiztion section
         self.delete_label = ttk.Label(self.dataframe_tool_bar, text="Visualize Data", font=medium_font)
         self.delete_label.grid(row=12, column=0, columnspan=2)
         
-        # Create a label for the datatype selection
+        # Create a label for column selection
         self.x_label = ttk.Label(self.dataframe_tool_bar, text="X Axis:")
         self.x_label.grid(row=13, column=0, sticky='e')
         
-        # Create a combobox for table selection
+        # Create a combobox for column selection
         self.x_combobox = ttk.Combobox(self.dataframe_tool_bar, width=13)
         self.x_combobox.grid(row=13, column=1, padx=2)
         
-        # Create a label for the datatype selection
+        # Create a label for column selection
         self.y_label = ttk.Label(self.dataframe_tool_bar, text="Y Axis:")
         self.y_label.grid(row=14, column=0, sticky='e')
         
-        # Create a combobox for table selection
+        # Create a combobox for column selection
         self.y_combobox = ttk.Combobox(self.dataframe_tool_bar, width=13)
         self.y_combobox.grid(row=14, column=1, padx=2)
         
-        # Create a label for the datatype selection
+        # Create a label for hue selection
         self.hue_label = ttk.Label(self.dataframe_tool_bar, text="Hue:")
         self.hue_label.grid(row=15, column=0, sticky='e')
         
-        # Create a combobox for table selection
+        # Create a combobox for hue selection
         self.hue_combobox = ttk.Combobox(self.dataframe_tool_bar, width=13)
         self.hue_combobox.grid(row=15, column=1, padx=2)
         
-        # Create a label for the datatype selection
+        # Create a label for plot type
         self.plt_label = ttk.Label(self.dataframe_tool_bar, text="Plot Type:")
         self.plt_label.grid(row=16, column=0, sticky='e')
         
-        # Create a combobox for table selection
+        # Create a combobox for plot type
         self.plt_combobox = ttk.Combobox(self.dataframe_tool_bar, width=13)
         self.plt_combobox.grid(row=16, column=1, padx=2)
         
         
-        # Populate the table combobox with the table names
+        # Populate the plot type combobox
         self.plt_combobox["values"] = self.plt_types
         self.plt_combobox.set("")  # Clear the selection
         
-        # Create a button to create the table
+        # Create a button to generate plot
         self.gen_plt_button = ttk.Button(self.dataframe_tool_bar, text="Generate Plot", command=self.gen_plt)
         self.gen_plt_button.grid(row=17, column=0, columnspan=2, sticky="n")
 
         
 
         self.dataframe_tool_bar.rowconfigure(3, minsize=3)
-        #self.dataframe_tool_bar.rowconfigure(11, minsize=10)

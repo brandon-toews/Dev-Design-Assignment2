@@ -197,7 +197,7 @@ class TableToolbar:
         self.exit_flag = exit_flag
         
         # Create tool bar frame
-        self.table_tool_bar = tk.Frame(self.home_frame, width=180, height=185, relief='ridge')
+        self.table_tool_bar = tk.Frame(self.home_frame, width=500, height=185, relief='ridge')
         self.table_tool_bar.grid(row=1, column=0, padx=3, pady=3)
 
         # Create a label for the table selection
